@@ -1,3 +1,30 @@
+def title
+  opening_str = <<-'EXPECTED'
+    _, __, , _ __, ___    _, __,   ___ _,_ __,          
+ / ` |_) \ | |_)  |    / \ |_     |  |_| |_           
+ \ , | \  \| |    |    \ / |      |  | | |            
+  ~  ~ ~   ) ~    ~     ~  ~      ~  ~ ~ ~~~          
+          ~'                                          
+  _,  _,  _, __, _,  __, ___   _  _ _ ___,  _, __, __,
+ (_  / ` /_\ |_) |   |_   |    |  | | ` /  /_\ |_) | \
+ , ) \ , | | | \ | , |    |    |/\| |  /   | | | \ |_/
+  ~   ~  ~ ~ ~ ~ ~~~ ~~~  ~    ~  ~ ~ ~~~  ~ ~ ~ ~ ~ 
+                                  Press ENTER to play.
+  EXPECTED
+  puts(opening_str)
+  gets.chomp
+end
+
+def end_screen
+  splash  = <<-'EXPECTED'
+ , _  _, _,_   __, _ __, __,
+ \ | / \ | |   | \ | |_  | \
+  \| \ / | |   |_/ | |   |_/
+   )  ~  `~'   ~   ~ ~~~ ~  
+  ~'              GAME OVER.
+  EXPECTED
+end
+
 def draw_map(room, player, current_level, level_name)
   map_str ="
   0-----0   0-----0   0-----0   0-----0     #{player[:Name]}.
@@ -94,7 +121,7 @@ player = {
 current_level = 0
 level_name = "The Cave Entrance"
 
-
+title
 
 while true
   draw_map(player_location, player, current_level, level_name)
