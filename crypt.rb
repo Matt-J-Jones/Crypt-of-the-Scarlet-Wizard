@@ -1,30 +1,50 @@
-def draw_map(room, map)
+def draw_map(room, player, current_level, level_name)
+  map_str ="
+  0-----0   0-----0   0-----0   0-----0     #{player[:Name]}.
+  |     |---|     |---|     |---|     |     Level: #{player[:Level]}.
+  |     |---|     |---|     |---|     |     Health: #{player[:Health]}.
+  |     |   |     |   |     |   |     |     Current Weapon: #{player[:Weapon]}.
+  0-----0   0-----0   0-----0   0-----0     Current Armour: #{player[:Armour]}.
+    | |       | |       | |       | |       Strength: #{player[:Strength]}.
+  0-----0   0-----0   0-----0   0-----0     Defence: #{player[:Defence]}.
+  |     |   |     |---|     |---|     |     Gold: #{player[:Gold]}.
+  |     |   |     |---|     |---|     |.
+  |     |   |     |   |     |   |     |.
+  0-----0   0-----0   0-----0   0-----0     Floor: #{current_level}.
+    | |                                     #{level_name}.
+  0-----0                          N   .
+  |     |                          |   .
+  |     |                       W--@--E.
+  |     |                          |   .
+  0-----0                          S   ."
+    
   system("clear") || system("cls")
-  temp_map = map.split(".")
+  temp_map = map_str.split(".")
   temp_map[room[0]][room[1]] = "X"
-  return_map = temp_map.join(".")
-  return return_map
+  return_map = temp_map.join("")
+  puts(return_map)
 end
 
 def room_numbers(number)
+  #in the form y, x
   room_centre = 
-  [[14, 4], [8, 4], [2 ,4],
-  [2, 14], [8, 14], [8, 24],
-  [8, 34], [2, 34], [2, 24]]
+  [[14, 6], [8, 6], [2 ,6],
+  [2, 16], [8, 16], [8, 26],
+  [8, 36], [2, 36], [2, 26]]
   return room_centre[number]
 end
 
 def room_directions(current_room, direction)
   connection_rooms = { 
-    "0" => {"NORTH" => 1},
-    "1" => {"NORTH" => 2, "SOUTH" => 0},
-    "2" => {"EAST" => 3, "SOUTH" => 1},
-    "3" => {"EAST" => 8, "SOUTH" => 4, "WEST" => 2},
-    "4" => {"NORTH" => 3, "EAST" => 5},
-    "5" => {"NORTH" => 8, "EAST" => 6, "WEST" => 4},
-    "6" => {"NORTH" => 7, "WEST" => 5},
-    "7" => {"SOUTH" => 6, "WEST" => 8},
-    "8" => {"EAST" => 7, "SOUTH" => 5, "WEST" => 3},
+    0 => {"NORTH" => 1},
+    1 => {"NORTH" => 2, "SOUTH" => 0},
+    2 => {"EAST" => 3, "SOUTH" => 1},
+    3 => {"EAST" => 8, "SOUTH" => 4, "WEST" => 2},
+    4 => {"NORTH" => 3, "EAST" => 5},
+    5 => {"NORTH" => 8, "EAST" => 6, "WEST" => 4},
+    6 => {"NORTH" => 7, "WEST" => 5},
+    7 => {"SOUTH" => 6, "WEST" => 8},
+    8 => {"EAST" => 7, "SOUTH" => 5, "WEST" => 3},
   }
   
   return connection_rooms[current_room][direction]
@@ -44,39 +64,49 @@ def compass(number)
   return options_str
 end 
 
-
-map_str ="
-0-----2   0-----3   0-----8   0-----7.
-|     |---|     |---|     |---|     |.
-|     |---|     |---|     |---|     |.
-|     |   |     |   |     |   |     |.
-0-----0   0-----0   0-----0   0-----0.
-  | |       | |       | |       | |  .
-0-----1   0-----4   0-----5   0-----6.
-|     |   |     |---|     |---|     |.
-|     |   |     |---|     |---|     |.
-|     |   |     |   |     |   |     |.
-0-----0   0-----0   0-----0   0-----0.
-  | |                                .
-0-----0                        N     .
-|     |                        |     .
-|     |                     W--@--E  .
-|     |                        |     .
-0-----0                        S     ."
+def player_name_gen
+  file = File.open("names.txt", "r")
+  names = file.read.split("\n")
+  file.close
+  return names.sample 
+end
 
 #in the form y, x
-room0 = [14, 4]
+room0 = [14, 6]
 player_location = room0
 current_room = 0
+name = player_name_gen
+
+player = {
+  :Name => name,
+  :Weapon => "Sword",
+  :Weapon_Bonus => 0,
+  :Armour => "None",
+  :Armour_Bonus => 0,
+  :Level => 1,
+  :Health => 100,
+  :Strength => 7,
+  :Defence => 3,
+  :Gold => 0,
+  :Luck => 0
+}
+
+current_level = 0
+level_name = "The Cave Entrance"
+
+
 
 while true
-  puts(draw_map(player_location, map_str))
+  draw_map(player_location, player, current_level, level_name)
   
   options = compass(current_room.to_i)
   puts("Type #{options} to move.")
   
-  print("Enter room number: ")
-  current_room = gets.chomp
+  print(": ")
+  direction = gets.chomp
+  if options.include?(direction.upcase)
+    current_room = room_directions(current_room, direction.upcase)
+  end
   
-  player_location = room_numbers(current_room.to_i)
+  player_location = room_numbers(current_room)
 end
