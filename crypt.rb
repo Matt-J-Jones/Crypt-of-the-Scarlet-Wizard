@@ -1,13 +1,8 @@
-['./screens', './map_and_movement', './fight'].each(&method(:require))
-
-def player_name_gen
-  # Randomly generates the players name from a preset list.
-  file = File.open("names.txt", "r")
-  names = file.read.split("\n")
-  file.close
-  return names.sample 
-end
-
+['./screens', 
+ './map_and_movement', 
+ './fight', 
+ './name_generator'].each(&method(:require))
+ 
 # in the form y, x
 # generates the player's starting location (room 0), name, and stats.
 
