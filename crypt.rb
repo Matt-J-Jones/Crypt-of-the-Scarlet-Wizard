@@ -1,8 +1,8 @@
-['./screens', 
- './map_and_movement', 
- './fight', 
- './name_generator'].each(&method(:require))
- 
+['./lib/screens', 
+ './lib/map_and_movement', 
+ './lib/fight', 
+ './lib/name_generator'].each(&method(:require))
+
 # in the form y, x
 # generates the player's starting location (room 0), name, and stats.
 
