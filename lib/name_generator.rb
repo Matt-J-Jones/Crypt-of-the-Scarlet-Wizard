@@ -1,6 +1,6 @@
 def player_name_gen
   # Randomly generates the players name from a preset list.
-  file = File.open("./names.txt", "r")
+  file = File.open("./lib/names.txt", "r")
   names = file.read.split("\n")
   file.close
 
